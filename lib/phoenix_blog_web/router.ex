@@ -7,5 +7,6 @@ defmodule PhoenixBlogWeb.Router do
 
   scope "/api", PhoenixBlogWeb do
     pipe_through :api
+    resources "/posts", PostController
   end
 end
