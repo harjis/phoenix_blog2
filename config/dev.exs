@@ -3,7 +3,7 @@ use Mix.Config
 # Configure your database
 config :phoenix_blog, PhoenixBlog.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "docker",
   database: "phoenix_blog_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
