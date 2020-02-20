@@ -120,8 +120,7 @@ defmodule PhoenixBlog.Blog do
   end
 
   def list_comments(post_id) do
-    comment_keys = Comment.__schema__(:fields)
-    Repo.all(from c in "comments", where: c.post_id == ^post_id, select: map(c, ^comment_keys))
+    Repo.all(from c in Comment, where: c.post_id == ^post_id)
   end
 
   @doc """
