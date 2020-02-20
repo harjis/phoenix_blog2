@@ -223,6 +223,13 @@ defmodule PhoenixBlog.Blog do
     Repo.all(Tag)
   end
 
+
+#  comment_keys = Comment.__schema__(:fields)
+#  Repo.all(from c in "comments", where: c.post_id == ^post_id, select: map(c, ^comment_keys))
+  def list_tags(post_id) do
+    Repo.all(from t in Tag, join: p in assoc(t, :posts), where: p.id == ^post_id)
+  end
+
   @doc """
   Gets a single tag.
 

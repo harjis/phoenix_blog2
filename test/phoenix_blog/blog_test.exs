@@ -171,6 +171,18 @@ defmodule PhoenixBlog.BlogTest do
       assert Blog.list_tags() == [tag]
     end
 
+    test "list_tags/1 returns all tags for a post" do
+      tag = tag_fixture()
+      post = post_fixture()
+      Blog.add_tag(post, tag)
+      post2 = post_fixture()
+      tag2 = tag_fixture()
+      tag3 = tag_fixture()
+      Blog.add_tag(post2, tag2)
+      Blog.add_tag(post2, tag3)
+      assert length(Blog.list_tags(post2.id)) == 2
+    end
+
     test "get_tag!/1 returns the tag with given id" do
       tag = tag_fixture()
       assert Blog.get_tag!(tag.id) == tag
