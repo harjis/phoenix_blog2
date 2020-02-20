@@ -85,6 +85,15 @@ defmodule PhoenixBlog.BlogTest do
       assert Blog.list_comments() == [comment]
     end
 
+    test "list_comments/1 returns all comments for blog" do
+      post2 = post_fixture()
+      {:ok, _comment2} = Blog.create_comment(Map.merge(@valid_attrs, %{post: post2}))
+      post = post_fixture()
+      {:ok, _comment} = Blog.create_comment(Map.merge(@valid_attrs, %{post: post}))
+      {:ok, _comment} = Blog.create_comment(Map.merge(@valid_attrs, %{post: post}))
+      assert length(Blog.list_comments(post.id)) == 2
+    end
+
     test "get_comment!/1 returns the comment with given id" do
       comment = comment_fixture()
       assert Blog.get_comment!(comment.id) == comment

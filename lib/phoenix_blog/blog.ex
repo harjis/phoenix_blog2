@@ -7,6 +7,7 @@ defmodule PhoenixBlog.Blog do
   alias PhoenixBlog.Repo
 
   alias PhoenixBlog.Blog.Post
+  alias PhoenixBlog.Blog.Comment
 
   @doc """
   Returns the list of posts.
@@ -115,6 +116,11 @@ defmodule PhoenixBlog.Blog do
   """
   def list_comments do
     Repo.all(Comment) |> Repo.preload(:post)
+  end
+
+  def list_comments(post_id) do
+    comment_keys = Comment.__schema__(:fields)
+    Repo.all(from c in "comments", where: c.post_id == ^post_id, select: map(c, ^comment_keys))
   end
 
   @doc """
