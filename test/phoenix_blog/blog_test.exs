@@ -197,6 +197,12 @@ defmodule PhoenixBlog.BlogTest do
       assert {:error, %Ecto.Changeset{}} = Blog.create_tag(@invalid_attrs)
     end
 
+    test "create_tag/2 with valid data creates a tag and adds it to post" do
+      post = post_fixture()
+      assert {:ok, %Tag{} = tag} = Blog.create_tag(@valid_attrs, post)
+      assert length(Blog.list_tags(post.id)) == 1
+    end
+
     test "update_tag/2 with valid data updates the tag" do
       tag = tag_fixture()
       assert {:ok, %Tag{} = tag} = Blog.update_tag(tag, @update_attrs)

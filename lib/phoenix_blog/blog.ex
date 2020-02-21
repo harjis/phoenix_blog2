@@ -222,9 +222,6 @@ defmodule PhoenixBlog.Blog do
     Repo.all(Tag)
   end
 
-
-#  comment_keys = Comment.__schema__(:fields)
-#  Repo.all(from c in "comments", where: c.post_id == ^post_id, select: map(c, ^comment_keys))
   def list_tags(post_id) do
     Repo.all(from t in Tag, join: p in assoc(t, :posts), where: p.id == ^post_id)
   end
@@ -261,6 +258,12 @@ defmodule PhoenixBlog.Blog do
     %Tag{}
     |> Tag.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def create_tag(attrs, post) do
+    {:ok, %Tag{} = tag} = create_tag(attrs)
+    add_tag(post, tag)
+    {:ok, tag}
   end
 
   @doc """
