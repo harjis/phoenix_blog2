@@ -3,7 +3,7 @@ use Mix.Config
 # Configure your database
 config :phoenix_blog, PhoenixBlog.Repo,
   username: "postgres",
-  password: "docker",
+  password: "postgres",
   database: "phoenix_blog_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

@@ -28,6 +28,21 @@ defmodule PhoenixBlogWeb.PostControllerTest do
     end
   end
 
+  describe "show" do
+    setup [:create_post]
+
+    test "shows post by id", %{conn: conn, post: %Post{id: id}} do
+      conn = get(conn, Routes.post_path(conn, :show, id))
+      assert json_response(conn, 200)["data"]
+    end
+
+    test "renders not found if post is not found", %{conn: conn, post: %Post{}} do
+      assert_error_sent 404, fn ->
+        get(conn, Routes.post_path(conn, :show, -1))
+      end
+    end
+  end
+
   describe "create post" do
     test "renders post when data is valid", %{conn: conn} do
       conn = post(conn, Routes.post_path(conn, :create), post: @create_attrs)
