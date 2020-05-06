@@ -24,9 +24,65 @@ defmodule PhoenixBlog.BlogTest do
       assert Blog.list_posts() == [post]
     end
 
+    test "get_post/1 returns the post with given id" do
+      post = post_fixture()
+      assert Blog.get_post(post.id) == post
+    end
+
+    test "get_post/1 return error tuple when not found" do
+      _post = post_fixture()
+      assert {:error, _} = Blog.get_post(-1)
+    end
+
     test "get_post!/1 returns the post with given id" do
       post = post_fixture()
       assert Blog.get_post!(post.id) == post
+    end
+
+    test "get_post!/1 throws when not found" do
+      _post = post_fixture()
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Blog.get_post!(-1)
+      end
+    end
+
+    test "get_post_by_title/1 returns post with given title" do
+      post = post_fixture()
+      assert {:ok, _} = Blog.get_post_by_title(post.title)
+    end
+
+    test "get_post_by_title/1 returns error tuple when not found" do
+      _post = post_fixture()
+      assert {:error, _} = Blog.get_post_by_title("not found")
+    end
+
+    test "get_post_by_title/1 what happens where there are many" do
+      _post = post_fixture()
+      post = post_fixture()
+      assert {:error, _} = Blog.get_post_by_title(post.title)
+    end
+
+    test "get_post_by_title!/1 returns post with given title" do
+      post = post_fixture()
+      assert Blog.get_post_by_title!(post.title) == post
+    end
+
+    test "get_post_by_title!/1 returns error tuple when not found" do
+      _post = post_fixture()
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Blog.get_post_by_title!("not found")
+      end
+    end
+
+    test "get_post_by_title!/1 what happens where there are many" do
+      _post = post_fixture()
+      post = post_fixture()
+
+      assert_raise Ecto.MultipleResultsError, fn ->
+        Blog.get_post_by_title!(post.title)
+      end
     end
 
     test "create_post/1 with valid data creates a post" do
@@ -87,6 +143,7 @@ defmodule PhoenixBlog.BlogTest do
 
     def comment_fixture(attrs \\ %{}) do
       post = post_fixture()
+
       {:ok, comment} =
         attrs
         |> Enum.into(@valid_attrs)
@@ -117,13 +174,18 @@ defmodule PhoenixBlog.BlogTest do
 
     test "create_comment/1 with valid data creates a comment" do
       post = post_fixture()
-      assert {:ok, %Comment{} = comment} = Blog.create_comment(Map.merge(@valid_attrs, %{post: post}))
+
+      assert {:ok, %Comment{} = comment} =
+               Blog.create_comment(Map.merge(@valid_attrs, %{post: post}))
+
       assert comment.body == "some body"
     end
 
     test "create_comment/1 with invalid data returns error changeset" do
       post = post_fixture()
-      assert {:error, %Ecto.Changeset{}} = Blog.create_comment(Enum.into(@invalid_attrs, %{post: post}))
+
+      assert {:error, %Ecto.Changeset{}} =
+               Blog.create_comment(Enum.into(@invalid_attrs, %{post: post}))
     end
 
     test "update_comment/2 with valid data updates the comment" do

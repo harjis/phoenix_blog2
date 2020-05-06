@@ -25,6 +25,12 @@ defmodule PhoenixBlogWeb.PostController do
     render(conn, "show.json", post: post)
   end
 
+  def show_no_bang(conn, %{"id" => id}) do
+    with {:ok, post} <- Blog.get_post(id) do
+      render(conn, "show.json", post: post)
+    end
+  end
+
   def update(conn, %{"id" => id, "post" => post_params}) do
     post = Blog.get_post!(id)
 

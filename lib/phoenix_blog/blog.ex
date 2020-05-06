@@ -36,7 +36,31 @@ defmodule PhoenixBlog.Blog do
       ** (Ecto.NoResultsError)
 
   """
+  def get_post(id) do
+    Repo.get(Post, id)
+    |> case do
+            nil -> {:error, :not_found}
+            post -> {:ok, post}
+          end
+  end
+
   def get_post!(id), do: Repo.get!(Post, id)
+
+  def get_post_by_title(title) do
+    Post
+    |> Post.with_title(title)
+    |> Repo.one()
+    |> case do
+         nil -> {:error, :not_found}
+         post -> {:ok, post}
+       end
+  end
+
+  def get_post_by_title!(title) do
+    Post
+    |> Post.with_title(title)
+    |> Repo.one!()
+  end
 
   @doc """
   Creates a post.
